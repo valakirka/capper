@@ -12,8 +12,8 @@ Capper.load do
 
   monit_config "beanstalkd", <<EOF, :roles => :worker
 <% beanstalkd_workers.each do |name, opts| %>
-check process payouts_and_callbacks_<%= name %>
-  with pidfile <%= pid_path %>/payouts_and_callbacks.<%= name %>.pid
+check process brandengage_workers_<%= name %>
+  with pidfile <%= pid_path %>/brandengage_workers.<%= name %>.pid
 <% if opts[:tubes].nil? %>
   start program = "<%= beanstalkd_script %> <%= name %> default <%= opts[:threads] || 1 %> start"
   stop program = "<%= beanstalkd_script %> <%= name %> default <%= opts[:threads] || 1 %> stop" with timeout 180 seconds
@@ -21,7 +21,7 @@ check process payouts_and_callbacks_<%= name %>
   start program = "<%= beanstalkd_script %> <%= name %> <%= opts[:tubes].join(':') %> <%= opts[:threads] || 1 %> start"
   stop program = "<%= beanstalkd_script %> <%= name %> <%= opts[:tubes].join(':') %> <%= opts[:threads] || 1 %> stop" with timeout 180 seconds
 <% end %>
-  group payouts_and_callbacks
+  group brandengage_workers
 
 <% end %>
 EOF
@@ -36,7 +36,7 @@ EOF
 
     desc "Restart beanstalkd workers"
     task :restart, :roles => :worker, :except => { :no_release => true } do
-      run "monit -g payouts_and_callbacks restart all"
+      run "monit -g brandengage_workers restart all"
     end
   end
 
