@@ -7,7 +7,7 @@ WORKER="$1" && shift
 export TUBES="$1" && shift
 export THREADS="$1" && shift
 
-export PIDFILE=<%= pid_path %>/payouts_and_callbacks.${WORKER}.pid
+export PIDFILE=<%= pid_path %>/brandengage_workers.${WORKER}.pid
 CMD="bin/processing"
 
 cd <%= current_path %> >/dev/null
